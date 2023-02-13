@@ -8,10 +8,28 @@ export async function createBooking(req: AuthenticatedRequest, res: Response) {
     const { roomId } = req.body;
 
     try {
-        const id = await bookingService.createBooking(Number(roomId), userId);
+        const bookingId = await bookingService.createBooking(Number(roomId), userId);
 
-        return res.status(httpStatus.OK).send(roomId);
+        return res.status(httpStatus.OK).send(bookingId);
     } catch (e) {
+        if (e.name === 'NotFoundError')
+            return res.sendStatus(httpStatus.NOT_FOUND);
+        if (e.name === 'CannotGetRoomError')
+            return res.sendStatus(httpStatus.FORBIDDEN);
+        return res.sendStatus(httpStatus.INTERNAL_SERVER_ERROR);
+    }
+};
+
+export async function updateBooking(req: AuthenticatedRequest, res: Response) {
+    const { roomId } = req.body;
+    const { bookingId: oldBookingId } = req.params;
+
+    try {
+        const bookingId = await bookingService.updateBooking(Number(roomId), Number(oldBookingId));
+
+        return res.status(httpStatus.OK).send(bookingId);
+    } catch (e) {
+        console.log(e);
         if (e.name === 'NotFoundError')
             return res.sendStatus(httpStatus.NOT_FOUND);
         if (e.name === 'CannotGetRoomError')
