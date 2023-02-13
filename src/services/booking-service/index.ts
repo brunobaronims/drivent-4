@@ -38,7 +38,7 @@ async function createBooking(roomId: number, userId: number) {
 
 async function updateBooking(roomId: number, bookingId: number) {
     const oldBooking = await bookingRepository.findBookingById(bookingId);
-    if (!oldBooking || !bookingId)
+    if (!oldBooking)
         throw cannotGetRoomError();
 
     const newRoom = await roomRepository.findRoomById(roomId);
