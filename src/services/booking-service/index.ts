@@ -5,6 +5,14 @@ import ticketRepository from "@/repositories/ticket-repository";
 import { cannotGetRoomError, notFoundError } from "@/errors";
 import { exclude } from "@/utils/prisma-utils";
 
+async function getBooking(userId: number) {
+    const booking = await bookingRepository.findBookingByUserId(userId);
+    if (!booking)
+        throw notFoundError();
+    
+    return exclude(booking, 'createdAt', 'updatedAt', 'userId', 'roomId');
+}
+
 async function createBooking(roomId: number, userId: number) {
     const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
     if (!enrollment) {
@@ -47,7 +55,8 @@ async function updateBooking(roomId: number, bookingId: number) {
 
 const bookingService = {
     createBooking,
-    updateBooking
+    updateBooking,
+    getBooking
 };
 
 export default bookingService;
