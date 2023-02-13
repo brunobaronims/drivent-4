@@ -201,7 +201,6 @@ describe('POST /booking', () => {
 
 
             const response = await server.post('/booking').set('Authorization', `Bearer ${token}`).send({ roomId: room.id });
-            console.log(response.body);
 
             const { body } = await server.get('/booking').set('Authorization', `Bearer ${token}`);
 
