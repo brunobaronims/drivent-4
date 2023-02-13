@@ -2,8 +2,10 @@ import { Response } from "express";
 import { AuthenticatedRequest } from "@/middlewares";
 import hotelService from "@/services/hotels-service";
 import httpStatus from "http-status";
+import { createPayment } from '../../tests/factories';
 
 export async function getHotels(req: AuthenticatedRequest, res: Response) {
+  
   const { userId } = req;
 
   try {

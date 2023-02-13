@@ -2,6 +2,7 @@ import { AuthenticatedRequest } from "@/middlewares";
 import enrollmentsService from "@/services/enrollments-service";
 import { Response } from "express";
 import httpStatus from "http-status";
+import dayjs from "dayjs";
 
 export async function getEnrollmentByUser(req: AuthenticatedRequest, res: Response) {
   const { userId } = req;
@@ -16,14 +17,18 @@ export async function getEnrollmentByUser(req: AuthenticatedRequest, res: Respon
 }
 
 export async function postCreateOrUpdateEnrollment(req: AuthenticatedRequest, res: Response) {
+  const birthday = dayjs(req.body.birthday).toDate();
+
   try {
     await enrollmentsService.createOrUpdateEnrollmentWithAddress({
       ...req.body,
       userId: req.userId,
+      birthday: birthday
     });
 
     return res.sendStatus(httpStatus.OK);
   } catch (error) {
+    console.log(error);
     return res.sendStatus(httpStatus.BAD_REQUEST);
   }
 }

@@ -36,7 +36,7 @@ export async function paymentProcess(req: AuthenticatedRequest, res: Response) {
     if (!ticketId || !cardData) {
       return res.sendStatus(httpStatus.BAD_REQUEST);
     }
-    const payment = await paymentService.paymentProcess(ticketId, userId, cardData);
+    const payment = await paymentService.paymentProcess(Number(ticketId), userId, cardData);
 
     if (!payment) {
       return res.sendStatus(httpStatus.NOT_FOUND);
